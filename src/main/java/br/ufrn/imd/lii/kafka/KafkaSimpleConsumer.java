@@ -26,11 +26,11 @@ public class KafkaSimpleConsumer implements ConsumerService<String> {
 
     @Override
     public void parse(ConsumerRecord<String, Message<String>> record) {
-        logger.info("Mensgaem recebida.  chave="+ record.key() + " valor="+record.value().getPayload() + " partição="+record.partition() + " offset="+record.offset());
+        System.out.println("Mensgaem recebida. Chave="+ record.key() + " valor="+record.value() + " partição="+record.partition() + " offset="+record.offset());
     }
 
     public static void main(String[] args) throws Exception {
-        new ServiceRunner<>(KafkaSimpleConsumer::new).start(5);
+        new ServiceRunner<>(KafkaSimpleConsumer::new).start(1);
     }
 
 }

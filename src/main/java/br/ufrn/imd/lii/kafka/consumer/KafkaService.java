@@ -39,13 +39,14 @@ public class KafkaService<T> implements Closeable {
 
     private Properties properties(String groupId) {
         var properties = new Properties();
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:29092");
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9093");
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         //Máximo de registro para cada pool.
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
         //Novos consumidores, iniciarão consumo da ultima mensagem e não do inicio.
-        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); //earliest | latest
         return properties;
     }
 
@@ -59,6 +60,7 @@ public class KafkaService<T> implements Closeable {
                 for (var record : records){
                     try{
                         consumerFunction.accept(record);
+                        consumer.commitSync();
                     }catch (Exception e){
                         var message = record.value();
                         deadLetters.send("DEAD_LETTER", message.getCorrelationId().toString(),

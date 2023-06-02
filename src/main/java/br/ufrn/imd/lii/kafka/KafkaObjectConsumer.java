@@ -26,12 +26,12 @@ public class KafkaObjectConsumer implements ConsumerService<KafkaSampleObject> {
 
     @Override
     public void parse(ConsumerRecord<String, Message<KafkaSampleObject>> record) {
-        logger.info("Mensgaem recebida.  chave="+ record.key() + " valor="+record.value() + " partição="+record.partition() + " offset="+record.offset());
+        System.out.println("Mensgaem recebida.  chave="+ record.key() + " valor="+record.value() + " partição="+record.partition() + " offset="+record.offset());
     }
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         var runner = new ServiceRunner<>(KafkaObjectConsumer::new);
-        runner.start(5);
+        runner.start(1);
     }
 
 }

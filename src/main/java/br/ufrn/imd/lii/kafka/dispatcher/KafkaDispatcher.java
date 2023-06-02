@@ -12,20 +12,20 @@ import java.util.concurrent.ExecutionException;
 
 public class KafkaDispatcher<T> implements Closeable {
 
-    private final KafkaProducer<String, Message<T>> producer;
+    private final KafkaProducer<String, T> producer;
 
     public KafkaDispatcher() {
         this.producer = new KafkaProducer<>(properties());
     }
 
     public void send(String topic, String key, Message<T> value) throws ExecutionException, InterruptedException {
-        var record = new ProducerRecord<>(topic, key, value);
+        var record = new ProducerRecord<>(topic, key, value.getPayload());
         producer.send(record, (data, ex) ->{
             if (ex != null){
                 ex.printStackTrace();
                 return;
             }
-            System.out.println("Sucesso ao enviar dado. topico="+ data.topic() + " - partição=" + data.partition() + " offset="+data.offset() + " timestamp="+data.timestamp());
+            System.out.println("Sucesso ao enviar dado. topico="+ data.topic() + " - partição=" + data.partition() + " offset="+data.offset() + " timestamp="+data.timestamp() + "message: "+ value.getPayload());
         }).get();
     }
 

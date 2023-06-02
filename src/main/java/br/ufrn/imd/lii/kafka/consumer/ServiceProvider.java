@@ -16,6 +16,9 @@ public class ServiceProvider<T> implements Callable<Void> {
         try (KafkaService<T> service =
                      new KafkaService<>(consumer.topic(), consumer.consumerGroup(), consumer::parse)){
             service.run();
+        }catch (Exception ex){
+            ex.printStackTrace();
+            throw ex;
         }
         return null;
     }
