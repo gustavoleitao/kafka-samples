@@ -21,12 +21,12 @@ public class KafkaSimpleConsumer implements ConsumerService<String> {
 
     @Override
     public String consumerGroup() {
-        return KafkaSimpleConsumer.class.getSimpleName();
+        return KafkaSimpleConsumer.class.getSimpleName() + "2";
     }
 
     @Override
     public void parse(ConsumerRecord<String, Message<String>> record) {
-        System.out.println("Mensgaem recebida. Chave="+ record.key() + " valor="+record.value() + " partição="+record.partition() + " offset="+record.offset());
+        System.out.println("Mensagem recebida. Chave="+ record.key() + " valor="+record.value() + " partição="+record.partition() + " offset="+record.offset());
     }
 
     public static void main(String[] args) throws Exception {

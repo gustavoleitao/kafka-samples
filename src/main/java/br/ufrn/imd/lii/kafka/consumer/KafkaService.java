@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.io.Closeable;
 import java.time.Duration;
@@ -23,7 +24,7 @@ public class KafkaService<T> implements Closeable {
     private String topic;
     private KafkaConsumer<String, Message<T>> consumer;
     private Consumer<ConsumerRecord<String,Message<T>>> consumerFunction;
-    private KafkaDispatcher<String> deadLetters = new KafkaDispatcher();
+    private KafkaDispatcher<String> deadLetters = new KafkaDispatcher(StringSerializer.class);
 
     public KafkaService(Pattern topicPattern, String groupId, Consumer<ConsumerRecord<String, Message<T>>> consumerFunction) {
         this.topicPattern = topicPattern;
